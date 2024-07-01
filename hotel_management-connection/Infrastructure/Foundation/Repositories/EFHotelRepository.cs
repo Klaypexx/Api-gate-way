@@ -12,7 +12,6 @@ public class EFHotelRepository : IHotelRepository
 
     public async Task<IReadOnlyList<Hotel>> GetAllHotels()
     {
-        /*_client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));*/
         HttpResponseMessage response = _client.GetAsync("http://localhost:5065/hotels").Result;
         string responseString = await response.Content.ReadAsStringAsync();
         IReadOnlyList<Hotel> hotels = JsonConvert.DeserializeObject<IReadOnlyList<Hotel>>(responseString);
