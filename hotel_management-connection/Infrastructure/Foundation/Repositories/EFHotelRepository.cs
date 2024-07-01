@@ -1,9 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Repositories;
-using System.Net.Http;
-using System;
-using System.Net.Http.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 using System.Text.Json;
 
 namespace Infrastructure.Foundation.Repositories;
@@ -13,11 +10,13 @@ public class EFHotelRepository : IHotelRepository
 
     public HttpClient _client = new HttpClient();
 
-    public async Task<string> GetAllHotels()
+    public async Task<IReadOnlyList<Hotel>> GetAllHotels()
     {
-        _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        /*_client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));*/
         HttpResponseMessage response = _client.GetAsync("http://localhost:5065/hotels").Result;
-        return response.Content.ReadAsStringAsync().Result;
+        string responseString = await response.Content.ReadAsStringAsync();
+        IReadOnlyList<Hotel> hotels = JsonConvert.DeserializeObject<IReadOnlyList<Hotel>>(responseString);
+        return hotels;
     }   
 
     /*    public void Save( Hotel hotel )

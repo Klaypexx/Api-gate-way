@@ -4,7 +4,7 @@ namespace Domain.Repositories;
 
 public interface IHotelRepository
 {
-    Task<string> GetAllHotels();
+    Task<IReadOnlyList<Hotel>> GetAllHotels();
 /*    Hotel GetHotelById(int id);
 
     void Save( Hotel hotel );

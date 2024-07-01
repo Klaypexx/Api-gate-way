@@ -2,10 +2,10 @@
 
 public class Hotel
 {
-    public int Id { get; private init; }
-    public string Name { get; private set; }
-    public string Address { get; private set; }
-    public DateTime OpenSince { get; private init; }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Address { get; set; }
+    public DateTime OpenSince { get; set; }
 
     public Hotel( string name, string address, DateTime openSince )
     {

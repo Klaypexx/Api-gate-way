@@ -3,7 +3,6 @@ using Domain.Repositories;
 using HotelManagement.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Text.Json;
 
 namespace HotelManagement.Controllers;
 
@@ -28,8 +27,8 @@ public class HotelsController : ControllerBase
     [HttpGet( "" )]
     public async Task<IActionResult> GetHotels()
     {
-        string hotels = await _hotelRepository.GetAllHotels();
-       
+
+        IReadOnlyList<Hotel> hotels = await _hotelRepository.GetAllHotels();
         return Ok(hotels);
     }
 
