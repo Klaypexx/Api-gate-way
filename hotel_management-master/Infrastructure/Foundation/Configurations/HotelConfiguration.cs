@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Domain.Hotels.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

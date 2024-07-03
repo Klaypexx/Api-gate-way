@@ -1,5 +1,6 @@
-﻿using Domain.Entities;
-using Domain.Repositories;
+﻿using Domain.Hotels.Entities;
+using Domain.Hotels.Repositories;
+using Infrastructure.Database;
 
 namespace Infrastructure.Foundation.Repositories;
 

@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using Domain.Repositories;
+﻿using Domain.Hotels.Entities;
+using Domain.Hotels.Repositories;
 using HotelManagement.Dto;
 using Microsoft.AspNetCore.Mvc;
 

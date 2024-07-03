@@ -1,22 +1,29 @@
-﻿using Domain.Entities;
-using Domain.Repositories;
+﻿using Domain.Configurations.Entities;
+using Domain.Hotels.Entities;
+using Domain.Hotels.Repositories;
 using Newtonsoft.Json;
 using System.Text.Json;
 
-namespace Infrastructure.Foundation.Repositories;
+namespace Infrastructure;
 
-public class EFHotelRepository : IHotelRepository
+public class HotelApiClient : IHotelRepository
 {
 
-    public HttpClient _client = new HttpClient();
+    private HttpClient _client = new HttpClient();
+    private HotelApiDomain _hotelApiDomain;
+
+    public HotelApiClient(HotelApiDomain hotelApiDomain)
+    {
+        _hotelApiDomain = hotelApiDomain;
+    }
 
     public async Task<IReadOnlyList<Hotel>> GetAllHotels()
     {
-        HttpResponseMessage response = _client.GetAsync("http://localhost:5065/hotels").Result;
+        HttpResponseMessage response = await _client.GetAsync(_hotelApiDomain.Address + "hotels");
         string responseString = await response.Content.ReadAsStringAsync();
         IReadOnlyList<Hotel> hotels = JsonConvert.DeserializeObject<IReadOnlyList<Hotel>>(responseString);
         return hotels;
-    }   
+    }
 
     /*    public void Save( Hotel hotel )
         {
