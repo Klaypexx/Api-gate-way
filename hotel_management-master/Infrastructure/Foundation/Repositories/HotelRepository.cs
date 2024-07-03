@@ -4,11 +4,11 @@ using Infrastructure.Database;
 
 namespace Infrastructure.Foundation.Repositories;
 
-public class EFHotelRepository : IHotelRepository
+public class HotelRepository : IHotelRepository
 {
     private readonly HotelManagementDbContext _dbContext;
 
-    public EFHotelRepository( HotelManagementDbContext dbContext )
+    public HotelRepository( HotelManagementDbContext dbContext )
     {
         _dbContext = dbContext;
     }

@@ -11,6 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Migrations", "Infrastructure.Migrations\Infrastructure.Migrations.csproj", "{3A4FD835-D0A7-4FF0-96F0-04E9A086969F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{C261D19B-53BD-4D45-824D-58020E6DCD6B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{524F7FBE-65C3-45F4-8145-18D7DC8E7D1B} = {524F7FBE-65C3-45F4-8145-18D7DC8E7D1B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +38,10 @@ Global
 		{3A4FD835-D0A7-4FF0-96F0-04E9A086969F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A4FD835-D0A7-4FF0-96F0-04E9A086969F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A4FD835-D0A7-4FF0-96F0-04E9A086969F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C261D19B-53BD-4D45-824D-58020E6DCD6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C261D19B-53BD-4D45-824D-58020E6DCD6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C261D19B-53BD-4D45-824D-58020E6DCD6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C261D19B-53BD-4D45-824D-58020E6DCD6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

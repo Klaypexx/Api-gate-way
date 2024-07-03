@@ -1,3 +1,4 @@
+using Application.Hotels;
 using Domain.Hotels.Repositories;
 using Infrastructure;
 using Infrastructure.Database;
@@ -9,7 +10,9 @@ var builder = WebApplication.CreateBuilder( args );
 IConfiguration configuration = builder.Configuration;
 IServiceCollection services = builder.Services;
 
-services.AddScoped<IHotelRepository, EFHotelRepository>();
+services.AddScoped<IHotelRepository, HotelRepository>();
+services.AddScoped<IHotelService, HotelService>();
+
 
 string connectionString = builder.Configuration.GetConnectionString("HotelManagement");
 services.AddDbContext<HotelManagementDbContext>(o =>

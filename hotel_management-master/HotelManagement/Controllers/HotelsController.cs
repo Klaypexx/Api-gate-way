@@ -1,4 +1,5 @@
-﻿using Domain.Hotels.Entities;
+﻿using Application.Hotels;
+using Domain.Hotels.Entities;
 using Domain.Hotels.Repositories;
 using HotelManagement.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +13,12 @@ namespace HotelManagement.Controllers;
 // методы http - https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 public class HotelsController : ControllerBase
 {
-    private readonly IHotelRepository _hotelRepository;
+    private readonly IHotelService _hotelService;
 
     // DI-контейнер
-    public HotelsController( IHotelRepository hotelRepository )
+    public HotelsController(IHotelService hotelService )
     {
-        _hotelRepository = hotelRepository;
+        _hotelService = hotelService;
     }
 
     // Http-метод GET
@@ -26,7 +27,7 @@ public class HotelsController : ControllerBase
     [HttpGet( "" )]
     public IActionResult GetHotels()
     {
-        IReadOnlyList<Hotel> hotels = _hotelRepository.GetAllHotels();
+        IReadOnlyList<Hotel> hotels = _hotelService.GetAllHotels();
 
         return Ok( hotels );
     }
@@ -34,7 +35,7 @@ public class HotelsController : ControllerBase
     [HttpGet("{id:int}")]
     public IActionResult GetHotelsById([FromRoute] int id)
     {
-        Hotel hotel = _hotelRepository.GetHotelById(id);
+        Hotel hotel = _hotelService.GetHotelById(id);
 
         return Ok(hotel);
     }
@@ -46,7 +47,7 @@ public class HotelsController : ControllerBase
     public IActionResult CreateHotel( /*Говорим что данные имеют формат CreateHotelRequest и лежат в теле http-запроса*/ [FromBody] CreateHotelRequest request )
     {
         Hotel hotel = new( request.Name, request.Address, request.OpenSince );
-        _hotelRepository.Save( hotel );
+        _hotelService.Save( hotel );
 
         // возвращает http-ответ со статусом 200-ОК
         return Ok();
@@ -62,14 +63,14 @@ public class HotelsController : ControllerBase
         // отделение методов по изменению - например изменить только адресс
 
         Hotel hotel = new( id, request.Name, request.Address );
-        _hotelRepository.Update( hotel );
+        _hotelService.Update( hotel );
         return Ok();
     }
 
     [HttpDelete( "{id:int}" )]
     public IActionResult DeleteHotel( [FromRoute] int id )
     {
-        _hotelRepository.Delete( id );
+        _hotelService.Delete( id );
 
         return Ok();
     }
