@@ -1,4 +1,6 @@
-using Domain.Hotels.Repositories;
+using Application.Hotels.Entities;
+using Application.Hotels.Repositories;
+using Application.Hotels.Services;
 using Domain.Configurations.Entities;
 using Infrastructure;
 
@@ -8,6 +10,7 @@ IConfiguration configuration = builder.Configuration;
 IServiceCollection services = builder.Services;
 
 services.AddScoped<IHotelRepository, HotelApiClient>();
+services.AddScoped<IHotelService, HotelService>();
 
 HotelApiDomain hotelApiDomain = configuration.GetSection("HotelApiDomain").Get<HotelApiDomain>();
 services.AddScoped(sp => hotelApiDomain);

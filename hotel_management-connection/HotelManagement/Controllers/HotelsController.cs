@@ -1,8 +1,8 @@
 ﻿using Domain.Hotels.Entities;
-using Domain.Hotels.Repositories;
 using HotelManagement.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using Application.Hotels.Entities;
 
 namespace HotelManagement.Controllers;
 
@@ -13,12 +13,12 @@ namespace HotelManagement.Controllers;
 // методы http - https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 public class HotelsController : ControllerBase
 {
-    private readonly IHotelRepository _hotelRepository;
+    private readonly IHotelService _hotelService;
 
     // DI-контейнер
-    public HotelsController( IHotelRepository hotelRepository )
+    public HotelsController( IHotelService hotelService )
     {
-        _hotelRepository = hotelRepository;
+        _hotelService = hotelService;
     }
 
     // Http-метод GET
@@ -28,52 +28,45 @@ public class HotelsController : ControllerBase
     public async Task<IActionResult> GetHotels()
     {
 
-        IReadOnlyList<Hotel> hotels = await _hotelRepository.GetAllHotels();
+        IReadOnlyList<Hotel> hotels = await _hotelService.GetAllHotels();
         return Ok(hotels);
     }
 
-    /*[HttpGet("{id:int}")]
-    public IActionResult GetHotelsById([FromRoute] int id)
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetHotelsById([FromRoute] int id)
     {
-        Hotel hotel = _hotelRepository.GetHotelById(id);
-
+        Hotel hotel = await _hotelService.GetHotelById(id);
         return Ok(hotel);
     }
 
-    // Http-метод POST
-    // POST метод подразумевает изменение состояния на сервере, например, создание нового отеля
-    // Также содержит body - тело запроса, в нем передаются данные
-    [HttpPost( "" )]
-    public IActionResult CreateHotel( *//*Говорим что данные имеют формат CreateHotelRequest и лежат в теле http-запроса*//* [FromBody] CreateHotelRequest request )
+    [HttpPost("")]
+    public IActionResult CreateHotel([FromBody] CreateHotelDto request )
     {
-        Hotel hotel = new( request.Name, request.Address, request.OpenSince );
-        _hotelRepository.Save( hotel );
+        Hotel hotel = new() { Name = request.Name, Address = request.Address, OpenSince = request.OpenSince };
+        _hotelService.Add(hotel);
 
-        // возвращает http-ответ со статусом 200-ОК
         return Ok();
     }
 
-    // Http-метод PUT
-    // PUT означает изменение состояние на сервере для сущ-их данных
-    [HttpPut( "{id:int}" )]
-    public IActionResult ModifyHotel( [FromRoute] int id, [FromBody] ModifyHotelRequest request )
+    [HttpPut("{id:int}")]
+    public IActionResult ModifyHotel([FromRoute] int id, [FromBody] ModifyHotelDto request)
     {
         // нет валидации
         // создаем отель, когда на самом деле надо модифицировать
         // отделение методов по изменению - например изменить только адресс
 
-        Hotel hotel = new( id, request.Name, request.Address );
-        _hotelRepository.Update( hotel );
+        Hotel hotel = new() { Id = id, Name = request.Name, Address = request.Address };
+        _hotelService.Update(hotel);
         return Ok();
     }
 
-    [HttpDelete( "{id:int}" )]
-    public IActionResult DeleteHotel( [FromRoute] int id )
+    [HttpDelete("{id:int}")]
+    public IActionResult DeleteHotel([FromRoute] int id)
     {
-        _hotelRepository.Delete( id );
+        _hotelService.Delete(id);
 
         return Ok();
-    }*/
+    }
 }
 
 

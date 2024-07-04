@@ -1,4 +1,4 @@
-﻿using Infrastructure.Foundation.Configurations;
+﻿using Infrastructure.Hotels.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database;

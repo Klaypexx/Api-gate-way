@@ -3,7 +3,7 @@
 // класс-dto
 // data transfer object
 // идея в том, что мы изолируем предметную область от внешнего мира
-public class CreateHotelRequest
+public class CreateHotelDto
 {
     public string Name { get; set; }
     public string Address { get; set; }

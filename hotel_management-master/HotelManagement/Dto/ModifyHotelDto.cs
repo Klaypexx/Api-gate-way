@@ -1,6 +1,6 @@
 ﻿namespace HotelManagement.Dto;
 
-public class ModifyHotelRequest
+public class ModifyHotelDto
 {
     public string Name { get; set; }
     public string Address { get; set; }

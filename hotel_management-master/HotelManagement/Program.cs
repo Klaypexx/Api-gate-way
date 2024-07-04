@@ -1,8 +1,10 @@
-using Application.Hotels;
-using Domain.Hotels.Repositories;
-using Infrastructure;
+using Application.Foundation.Entities;
+using Application.Hotels.Entities;
+using Application.Hotels.Repositories;
+using Application.Hotels.Services;
 using Infrastructure.Database;
-using Infrastructure.Foundation.Repositories;
+using Infrastructure.Foundation;
+using Infrastructure.Hotels.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder( args );
@@ -12,6 +14,7 @@ IServiceCollection services = builder.Services;
 
 services.AddScoped<IHotelRepository, HotelRepository>();
 services.AddScoped<IHotelService, HotelService>();
+services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 string connectionString = builder.Configuration.GetConnectionString("HotelManagement");
