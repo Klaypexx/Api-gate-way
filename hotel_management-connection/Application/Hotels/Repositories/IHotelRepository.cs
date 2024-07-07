@@ -12,4 +12,6 @@ public interface IHotelRepository
     Task Update(Hotel hotel);
 
     Task Delete(int id);
+
+    void Authorization();
 }

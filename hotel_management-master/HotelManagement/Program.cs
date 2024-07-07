@@ -2,10 +2,13 @@ using Application.Foundation.Entities;
 using Application.Hotels.Entities;
 using Application.Hotels.Repositories;
 using Application.Hotels.Services;
+using HotelManagement.Auth;
 using Infrastructure.Database;
 using Infrastructure.Foundation;
 using Infrastructure.Hotels.Repositories;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder( args );
 
@@ -18,11 +21,10 @@ services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 string connectionString = builder.Configuration.GetConnectionString("HotelManagement");
-services.AddDbContext<HotelManagementDbContext>(o =>
-{
-    o.UseSqlServer(connectionString,
-        ob => ob.MigrationsAssembly(typeof(HotelManagementDbContext).Assembly.FullName));
-});
+
+services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, AuthHandler>("BasicAuthentication", null);
+
+services.AddDbContext<HotelManagementDbContext>(options => options.UseSqlServer(connectionString));
 
 services.AddControllers();
 
@@ -38,7 +40,7 @@ if ( app.Environment.IsDevelopment() )
     app.UseSwaggerUI();
 }
 
-app.UseAuthorization();
+/*app.UseAuthorization();*/
 
 app.MapControllers();
 

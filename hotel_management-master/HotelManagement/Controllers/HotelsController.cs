@@ -1,6 +1,7 @@
 ﻿using Application.Hotels.Entities;
 using Domain.Hotels.Entities;
 using HotelManagement.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagement.Controllers;
@@ -8,6 +9,7 @@ namespace HotelManagement.Controllers;
 // Описание работы с web api https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-8.0&tabs=visual-studio
 [ApiController]
 [Route( "hotels" )]
+[Authorize]
 // http-протокол https://developer.mozilla.org/ru/docs/Web/HTTP
 // методы http - https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 public class HotelsController : ControllerBase
