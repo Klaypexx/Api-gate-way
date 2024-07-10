@@ -1,21 +1,25 @@
-using Domain.Repositories;
-using Infrastructure.Foundation;
-using Infrastructure.Foundation.Repositories;
-using Microsoft.EntityFrameworkCore;
+using Application.Hotels.Entities;
+using Application.Hotels.Repositories;
+using Application.Hotels.Services;
+using Domain.Configurations.Entities;
+using Infrastructure;
 
 var builder = WebApplication.CreateBuilder( args );
 
-// Add services to the DI-container.
-// https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-8.0
-// https://www.youtube.com/watch?v=NkTF_6IQPiY&ab_channel=RawCoding - lifetime
-// добавляем в DI-конейтнер реализацию IHotelRepository
-builder.Services.AddScoped<IHotelRepository, EFHotelRepository>();
+IConfiguration configuration = builder.Configuration;
+IServiceCollection services = builder.Services;
 
-builder.Services.AddControllers();
+services.AddScoped<IHotelRepository, HotelApiClient>();
+services.AddScoped<IHotelService, HotelService>();
+
+HotelApiDomain hotelApiDomain = configuration.GetSection("HotelApiDomain").Get<HotelApiDomain>();
+services.AddScoped(sp => hotelApiDomain);
+
+services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 WebApplication app = builder.Build();
 

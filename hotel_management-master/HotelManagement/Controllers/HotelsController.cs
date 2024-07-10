@@ -1,6 +1,7 @@
-﻿using Domain.Entities;
-using Domain.Repositories;
+﻿using Application.Hotels.Entities;
+using Domain.Hotels.Entities;
 using HotelManagement.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagement.Controllers;
@@ -8,33 +9,34 @@ namespace HotelManagement.Controllers;
 // Описание работы с web api https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-8.0&tabs=visual-studio
 [ApiController]
 [Route( "hotels" )]
+[Authorize]
 // http-протокол https://developer.mozilla.org/ru/docs/Web/HTTP
 // методы http - https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 public class HotelsController : ControllerBase
 {
-    private readonly IHotelRepository _hotelRepository;
+    private readonly IHotelService _hotelService;
 
     // DI-контейнер
-    public HotelsController( IHotelRepository hotelRepository )
+    public HotelsController(IHotelService hotelService )
     {
-        _hotelRepository = hotelRepository;
+        _hotelService = hotelService;
     }
 
     // Http-метод GET
     // GET подразумевает что мы запрашиваем данные с сервера, не меняем состояние на нем
     // может содержать query-параметре в качестве метода фильтра/уточнения запроса данных
     [HttpGet( "" )]
-    public IActionResult GetHotels()
+    public async  Task<IActionResult> GetHotels()
     {
-        IReadOnlyList<Hotel> hotels = _hotelRepository.GetAllHotels();
+        IReadOnlyList<Hotel> hotels = await _hotelService.GetAllHotels();
 
         return Ok( hotels );
     }
 
     [HttpGet("{id:int}")]
-    public IActionResult GetHotelsById([FromRoute] int id)
+    public async Task<IActionResult> GetHotelsById([FromRoute] int id)
     {
-        Hotel hotel = _hotelRepository.GetHotelById(id);
+        Hotel hotel = await _hotelService.GetHotelById(id);
 
         return Ok(hotel);
     }
@@ -43,10 +45,10 @@ public class HotelsController : ControllerBase
     // POST метод подразумевает изменение состояния на сервере, например, создание нового отеля
     // Также содержит body - тело запроса, в нем передаются данные
     [HttpPost( "" )]
-    public IActionResult CreateHotel( /*Говорим что данные имеют формат CreateHotelRequest и лежат в теле http-запроса*/ [FromBody] CreateHotelRequest request )
+    public async Task<IActionResult> CreateHotel( [FromBody] CreateHotelDto request )
     {
-        Hotel hotel = new( request.Name, request.Address, request.OpenSince );
-        _hotelRepository.Save( hotel );
+        Hotel hotel = new() { Name = request.Name, Address = request.Address, OpenSince = request.OpenSince };
+        await _hotelService.Add( hotel );
 
         // возвращает http-ответ со статусом 200-ОК
         return Ok();
@@ -55,21 +57,22 @@ public class HotelsController : ControllerBase
     // Http-метод PUT
     // PUT означает изменение состояние на сервере для сущ-их данных
     [HttpPut( "{id:int}" )]
-    public IActionResult ModifyHotel( [FromRoute] int id, [FromBody] ModifyHotelRequest request )
+    public async Task<IActionResult> ModifyHotel( [FromRoute] int id, [FromBody] ModifyHotelDto request)
     {
         // нет валидации
         // создаем отель, когда на самом деле надо модифицировать
         // отделение методов по изменению - например изменить только адресс
 
-        Hotel hotel = new( id, request.Name, request.Address );
-        _hotelRepository.Update( hotel );
+        Hotel hotel = new() { Id = id, Name = request.Name, Address = request.Address };
+
+        await _hotelService.Update( hotel );
         return Ok();
     }
 
     [HttpDelete( "{id:int}" )]
-    public IActionResult DeleteHotel( [FromRoute] int id )
+    public async Task<IActionResult> DeleteHotel( [FromRoute] int id )
     {
-        _hotelRepository.Delete( id );
+        await _hotelService.Delete( id );
 
         return Ok();
     }

@@ -1,29 +1,36 @@
-using Domain.Repositories;
+using Application.Foundation.Entities;
+using Application.Hotels.Entities;
+using Application.Hotels.Repositories;
+using Application.Hotels.Services;
+using HotelManagement.Auth;
+using Infrastructure.Database;
 using Infrastructure.Foundation;
-using Infrastructure.Foundation.Repositories;
+using Infrastructure.Hotels.Repositories;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder( args );
 
-// Add services to the DI-container.
-// https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-8.0
-// https://www.youtube.com/watch?v=NkTF_6IQPiY&ab_channel=RawCoding - lifetime
-// добавляем в DI-конейтнер реализацию IHotelRepository
-builder.Services.AddScoped<IHotelRepository, EFHotelRepository>();
+IConfiguration configuration = builder.Configuration;
+IServiceCollection services = builder.Services;
 
-string connectionString = builder.Configuration.GetConnectionString( "HotelManagement" );
-builder.Services.AddDbContext<HotelManagementDbContext>( o =>
-{
-    o.UseSqlServer( connectionString,
-        ob => ob.MigrationsAssembly( typeof( HotelManagementDbContext ).Assembly.FullName ) );
-} );
+services.AddScoped<IHotelRepository, HotelRepository>();
+services.AddScoped<IHotelService, HotelService>();
+services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+string connectionString = builder.Configuration.GetConnectionString("HotelManagement");
 
+services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, AuthHandler>("BasicAuthentication", null);
+
+services.AddDbContext<HotelManagementDbContext>(options => options.UseSqlServer(connectionString));
+
+services.AddControllers();
+
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+    
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,7 +40,7 @@ if ( app.Environment.IsDevelopment() )
     app.UseSwaggerUI();
 }
 
-app.UseAuthorization();
+/*app.UseAuthorization();*/
 
 app.MapControllers();
 
